@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>最新资讯</h2>
+<ul class="post-list">
+{% for p in posts %}
+  <li>
+    <a href="{{ url_for('post', slug=p.slug) }}">{{ p.title }}</a>
+    <span class="date">{{ p.date }}</span>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "生态文明建设" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{{ url_for('index') }}">首页</a> |
+      <a href="{{ url_for('about') }}">关于</a> |
+      <a href="{{ url_for('initiatives') }}">生态实践</a> |
+      <a href="{{ url_for('blog') }}">资讯</a> |
+      <a href="{{ url_for('resources') }}">资源中心</a> |
+      <a href="{{ url_for('contact') }}">联系我们</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>&copy; 2025 生态文明建设网站 All Rights Reserved.</p>
+  </footer>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
