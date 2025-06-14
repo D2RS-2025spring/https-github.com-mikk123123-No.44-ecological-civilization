@@ -27,7 +27,7 @@ def create_app():
 
     @app.route('/blog')
     def blog():
-        posts = sorted(app.posts, key=lambda p: p['date'], reverse=True)
+        posts = sorted(app.posts, key=lambda p: p['title'], reverse=True)
         return render_template('blog.html', posts=posts)
 
     @app.route('/blog/<slug>')
