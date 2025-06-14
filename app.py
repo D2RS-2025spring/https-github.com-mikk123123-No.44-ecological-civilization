@@ -1,9 +1,20 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, request, url_for
 import json
 from config import Config
 
+# 添加 ProxyFix 中间件
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+
 def create_app():
     app = Flask(__name__)
+
+    # 在配置 ProxyFix 之前或之后打印，看看是否有区别
+    print(f"WSGI app before ProxyFix: {app.wsgi_app}")
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+    )
+    print(f"WSGI app after ProxyFix: {app.wsgi_app}")
     app.config.from_object(Config)
 
     # 加载博客数据
@@ -15,6 +26,14 @@ def create_app():
 
     @app.route('/')
     def index():
+        print("--- Request Environment ---")
+        for key, value in sorted(request.environ.items()): # 排序方便查看
+            if 'SCRIPT_NAME' in key or 'PATH_INFO' in key or 'FORWARDED' in key or 'HOST' in key or 'X_REAL_IP' in key or 'PROXY' in key:
+                 print(f"{key}: {value}")
+        print("--- URL Generation ---")
+        print(f"url_for('index'): {url_for('index')}")
+        print(f"url_for('static', filename='css/style.css'): {url_for('static', filename='css/style.css')}")
+        print("--- End Request Debug ---")
         return render_template('index.html')
 
     @app.route('/about')
@@ -49,4 +68,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True, )
